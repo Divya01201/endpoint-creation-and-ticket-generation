@@ -8,12 +8,12 @@ app = FastAPI()
 async def root():
     return {"status": "FastAPI server is running"}
 
-# Freshdesk credentials
-api_key = "4KgbOs39rbHGDLdqPLc"
-# freshdesk_url = f"https://u2opiamobilepvtltd.freshdesk.com/api/v2/tickets"
+
+api_key = "yourtoken"
 
 
-@app.post("/feshDesk-webhook")
+
+@app.post("/webhook")
 async def whatsapp_webhook(request: Request):
     try:
         payload = await request.json()
@@ -47,23 +47,24 @@ async def whatsapp_webhook(request: Request):
             ticket_data = {
                 "subject": subject,
                 "description": description,
-                "email": "divya.s@u2opiamobile.com",  # requester email
+                "email": "yourmail",  # requester email
                 "priority": 2,
                 "status": 2,
                 "source": 7,
             }
 
             response = requests.post(
-                "https://u2opiamobilepvtltd.freshdesk.com/api/v2/tickets",
+                "your URL",
                 json=ticket_data,
                 auth=HTTPBasicAuth(api_key, "X")
             )
 
-            print("Freshdesk Response:", response.status_code, response.text)
-            return {"status": "ticket created", "freshdesk_status": response.status_code}
+            print(" Response:", response.status_code, response.text)
+            return {"status": "ticket created", "status": response.status_code}
 
         return {"status": "missing fields, no ticket created"}
 
     except Exception as ex:
         print("Error:", str(ex))
         return {"status": "error", "details": str(ex)}
+
